@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: stage-anchor-gates-and-handoff-note
+expected_outcome: |
+  Starts at the right stage for a finished change, labels replies with the Delivery Stage anchor, stops for
+  approval between stages, carries plan requirement IDs forward, writes a delivery-notes.md without inventing
+  results, and asks which skill sets are installed.
+context:
+  scaffold_script: place-files.sh
