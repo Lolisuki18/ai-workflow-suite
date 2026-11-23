@@ -5,6 +5,9 @@ Usage:
   python scripts/install-all.py [install.py options]          # e.g. --agent gemini --scope project --copy
   python scripts/install-all.py --repos-dir ~/skills --dry-run
   python scripts/install-all.py --list                         # show the repos that would be used
+  python scripts/install-all.py --repos dev,pr                 # only these repos: dev, pr, qa, docs, suite
+  python scripts/install-all.py --profile minimal              # a small starter set instead of everything
+  python scripts/install-all.py --only qa-lifecycle,bug-investigator
 
 A skill repo is any folder under --repos-dir (default: the parent of this repo), up to two levels
 deep, that contains scripts/install.py. Every option except --repos-dir and --list is forwarded to
@@ -17,6 +20,23 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
+
+# short key -> text that must appear in the repo folder name
+REPO_KEYS = {"dev": "dev-workflow", "pr": "pull-request", "qa": "qa-workflow", "docs": "docs-workflow", "suite": "ai-workflow-suite"}
+OLD_PR_NAME = "skill-code-review"  # the pull-request repo may still be cloned under its old name
+
+# starter profiles: skill names; `full` = everything
+PROFILES = {
+    "minimal": ["dev-lifecycle", "feature-plan-writer", "test-case-writer", "bug-investigator",
+                "pre-pr-self-review", "pr-description-writer", "pr-review-writer", "commit-message-writer"],
+    "dev": ["dev-lifecycle", "feature-plan-writer", "test-case-writer", "codebase-auditor", "bug-investigator",
+            "refactor-planner", "security-reviewer", "migration-writer", "code-explainer", "ci-cd-setup",
+            "performance-profiler"],
+    "qa": ["qa-lifecycle", "qa-test-plan-writer", "qa-test-matrix-writer", "qa-e2e-writer", "qa-defect-writer",
+           "qa-summary-reporter", "qa-api-tester", "qa-nonfunctional-writer", "qa-regression-planner",
+           "qa-accessibility-auditor"],
+    "full": None,
+}
 
 
 def find_repos(root: Path):
@@ -36,12 +56,26 @@ def main() -> int:
                                  allow_abbrev=False)
     ap.add_argument("--repos-dir", default=str(HERE.parent), help="folder holding the skill repos")
     ap.add_argument("--list", action="store_true", help="list the repos found and exit")
+    ap.add_argument("--repos", help="comma-separated repo keys to use: dev, pr, qa, docs, suite")
+    ap.add_argument("--profile", choices=sorted(PROFILES), help="install a predefined set of skills")
     args, forward = ap.parse_known_args()
 
     repos = find_repos(Path(args.repos_dir).expanduser().resolve())
+    if args.repos:
+        keys = [k.strip() for k in args.repos.split(",") if k.strip()]
+        bad = [k for k in keys if k not in REPO_KEYS]
+        if bad:
+            print(f"error: unknown repo key(s) {bad}; use {sorted(REPO_KEYS)}", file=sys.stderr)
+            return 1
+        def match(repo):
+            n = repo.name
+            return any(REPO_KEYS[k] in n or (k == "pr" and OLD_PR_NAME in n) for k in keys)
+        repos = [r for r in repos if match(r)]
     if not repos:
         print(f"error: no skill repos found under {args.repos_dir}", file=sys.stderr)
         return 1
+    if args.profile and PROFILES[args.profile] is not None:
+        forward += ["--only", ",".join(PROFILES[args.profile])]
     if args.list:
         for r in repos:
             print(r)
