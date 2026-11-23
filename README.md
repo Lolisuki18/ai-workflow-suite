@@ -12,11 +12,11 @@ The glue for four Agent Skills repos: one orchestrator (`delivery-lifecycle`) th
 ## Skill index
 
 <!-- skills:start -->
-**1 skills.** This index is generated from each `SKILL.md`; run `python scripts/readme-index.py` to refresh it.
+**1 skill.** This index is generated from each `SKILL.md`; run `python scripts/readme-index.py` to refresh it.
 
 | Skill | What it does |
 |---|---|
-| [`delivery-lifecycle`](delivery-lifecycle/SKILL.md) | Orchestrates a whole delivery across the four skill sets in 5 stages — Build (dev-lifecycle), Pull Request (pre-pr-self-review, commit and PR text), QA (qa-lifecycle)... |
+| [`delivery-lifecycle`](delivery-lifecycle/SKILL.md) | Orchestrates a whole delivery across the four skill sets in 5 stages - Build, Pull Request, QA, Docs and Release |
 <!-- skills:end -->
 
 ## The flow
@@ -45,10 +45,13 @@ Plugin skills are namespaced by the plugin name (for example `/dev-workflow-skil
 
 ## Install with scripts
 
+Every installed skill adds its `description` to the context of every conversation (about 5,000 tokens for all 44 skills after shortening). That is why `install-all.py` installs only the `minimal` profile unless you ask for more.
+
 Clone the four repos and this one next to each other, then:
 
 ```powershell
-python scripts/install-all.py                      # every repo found next to this one, into ~/.claude/skills
+python scripts/install-all.py                      # the small `minimal` profile (8 skills) into ~/.claude/skills
+python scripts/install-all.py --profile full       # all 44 skills
 python scripts/install-all.py --agent gemini       # same options as each repo's scripts/install.py
 python scripts/install-all.py --dry-run            # preview
 python scripts/install-all.py --list               # which repos were found

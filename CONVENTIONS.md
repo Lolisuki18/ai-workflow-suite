@@ -57,12 +57,12 @@ Plan requirements `R1..Rn` are the single source. QA matrices refer to them, doc
 
 ## 7. Language
 
-Reply in the user's language (English or Vietnamese). Keep identifiers, commands, code, IDs and labels in their original form. Trigger keywords in each skill `description` are bilingual (English + Vietnamese).
+Reply in the user's language (English or Vietnamese). Keep identifiers, commands, code, IDs and labels in their original form. Skill `description` fields are written in English only: the agent matches a request in any language to them, and Vietnamese prompts stay in the trigger evals to check that this works.
 
 ## 8. Skill file rules (enforced by each repo's validator)
 
 - Folder name equals `name`; kebab-case.
-- `description`: third-person verb first, at most 900 characters, contains `Do NOT use`, has Vietnamese trigger words, names the skill to use instead.
+- `description`: English only, third-person verb first, at most 650 characters (every description is loaded into the agent's context, so keep it short): one sentence of purpose, 4-5 trigger phrases, then `Do NOT use for ...` naming the skill to use instead.
 - `SKILL.md` under 250 lines; long material in `references/`, one level deep.
 - Code fences balanced; every mentioned `references/` or `scripts/` file exists.
 - A skill reaches a sibling skill only as `../<skill-name>/` and must still work, with reduced scope, when the sibling is missing.

@@ -13,3 +13,7 @@ Format: newest first. Skills are prompts, so "breaking" means a change in behavi
 - `scripts/check-links.py` (cross-repo skill names, relative links, repository URLs) and a CI job that checks the five repos out side by side.
 - `install-all.py --repos`, `--profile` (`minimal`, `dev`, `qa`, `full`) and `--only`; `install.py --only` / `--exclude`.
 - Shared `readme-index.py` generates the skill index in every README.
+
+### Changed
+- All skill descriptions are English only and about 35% shorter (one sentence of purpose, 4 trigger phrases, `Do NOT use for ...`); about 8,500 to 5,400 tokens for 44 skills. The shared validator now requires English and at most 650 characters.
+- `install-all.py` installs the `minimal` profile by default; use `--profile full` for everything.

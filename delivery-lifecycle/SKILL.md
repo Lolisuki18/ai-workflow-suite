@@ -1,6 +1,6 @@
 ---
 name: delivery-lifecycle
-description: Orchestrates a whole delivery across the four skill sets in 5 stages — Build (dev-lifecycle), Pull Request (pre-pr-self-review, commit and PR text), QA (qa-lifecycle), Docs (docs-lifecycle) and Release (changelog and runbook) — handing artifacts from one stage to the next with a hard stop between stages. Use when the user says 'take this from idea to release', 'full delivery workflow', 'build, test, document and ship this feature', 'what is the whole process', 'từ ý tưởng đến phát hành', 'làm trọn quy trình phát triển đến bàn giao', 'quy trình tổng thể dự án', 'làm xong cả code test và tài liệu'. Do NOT use for a single stage on its own (use dev-lifecycle, qa-lifecycle or docs-lifecycle directly), a quick code edit, one bug (use bug-investigator), or one document.
+description: Orchestrates a whole delivery across the four skill sets in 5 stages - Build, Pull Request, QA, Docs and Release - handing artifacts from one stage to the next with a hard stop between stages. Use when the user says 'take this from idea to release', 'full delivery workflow', 'build, test, document and ship this feature', 'what is the whole process'. Do NOT use for a single stage on its own (use dev-lifecycle, qa-lifecycle or docs-lifecycle directly), a quick code edit, one bug (use bug-investigator), or one document.
 ---
 
 # Delivery Lifecycle — Conductor of the 5 stages
