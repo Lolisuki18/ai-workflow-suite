@@ -1,0 +1,50 @@
+{
+  "name": "lolisuki18-skills",
+  "description": "Agent skills for development, pull requests, QA and documentation workflows.",
+  "owner": {
+    "name": "Lolisuki18",
+    "url": "https://github.com/Lolisuki18"
+  },
+  "plugins": [
+    {
+      "name": "dev-workflow-skills",
+      "description": "Eleven agent skills from idea to audited code: lifecycle, plans, tests, audit, bug investigation, refactor, security review, migration, code explainer performance profiling and CI/CD setup.",
+      "source": {
+        "source": "github",
+        "repo": "Lolisuki18/dev-workflow-skills"
+      }
+    },
+    {
+      "name": "pull-request-skills",
+      "description": "Nine agent skills for the life of a pull request: commit messages, PR descriptions, self-review, reviews, replies, CI triage, merge conflicts, PR splitting and code comments.",
+      "source": {
+        "source": "github",
+        "repo": "Lolisuki18/pull-request-skills"
+      }
+    },
+    {
+      "name": "qa-workflow-skills",
+      "description": "Ten agent skills for the software testing life cycle: test plan, test matrix, E2E, API, non-functional, regression, accessibility, defects and summary report with a Go/No-Go verdict.",
+      "source": {
+        "source": "github",
+        "repo": "Lolisuki18/qa-workflow-skills"
+      }
+    },
+    {
+      "name": "docs-workflow-skills",
+      "description": "Thirteen agent skills for documentation written from real code: README, diagrams, API docs, ADRs, changelog, runbook, postmortem, SDLC reports and the Review 2 package.",
+      "source": {
+        "source": "github",
+        "repo": "Lolisuki18/docs-workflow-skills"
+      }
+    },
+    {
+      "name": "ai-workflow-suite",
+      "description": "Delivery orchestrator (build, pull request, QA, docs, release) plus shared conventions for the four skill repos.",
+      "source": {
+        "source": "github",
+        "repo": "Lolisuki18/ai-workflow-suite"
+      }
+    }
+  ]
+}

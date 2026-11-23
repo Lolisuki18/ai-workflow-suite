@@ -1,0 +1,18 @@
+{
+  "name": "ai-workflow-suite",
+  "version": "0.2.0",
+  "description": "Delivery orchestrator (build, pull request, QA, docs, release) plus shared conventions for the four skill repos.",
+  "author": {
+    "name": "Lolisuki18",
+    "url": "https://github.com/Lolisuki18"
+  },
+  "homepage": "https://github.com/Lolisuki18/ai-workflow-suite",
+  "repository": "https://github.com/Lolisuki18/ai-workflow-suite",
+  "license": "MIT",
+  "keywords": [
+    "orchestrator",
+    "workflow",
+    "delivery"
+  ],
+  "skills": "."
+}
