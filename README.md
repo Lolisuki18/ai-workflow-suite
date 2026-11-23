@@ -48,6 +48,6 @@ Runs on this repo's skills only. The other repos have their own validators (`val
 
 ## Status
 
-- `delivery-lifecycle` is new and has not been run on a real agent. One eval case exists in `delivery-lifecycle/evals/` (not yet run).
+- `delivery-lifecycle`: one eval case in `delivery-lifecycle/evals/`, run once on 2026-11-23 by a Claude subagent that was given only the SKILL.md. It passed all 7 graders (stage anchor, asked which skill sets are installed, carried R1..R3, stopped for approval, facts-only handoff note). The first run exposed an inconsistent fixture (a stub marked Done), which was fixed and re-run. It was not chosen by an agent from its description, so triggering is untested.
 - The four repos' own eval status is in each repo's `evals/README.md`.
 - MIT licensed (see `LICENSE`).
