@@ -2,7 +2,8 @@
 """Install the skills of every skill repo found next to this one with a single command.
 
 Usage:
-  python scripts/install-all.py [install.py options]          # e.g. --agent gemini --scope project --copy
+  python scripts/install-all.py [install.py options]          # installs the `minimal` profile; e.g. --agent gemini --scope project --copy
+  python scripts/install-all.py --profile full                 # every skill (about 5,000 tokens of descriptions in each conversation)
   python scripts/install-all.py --repos-dir ~/skills --dry-run
   python scripts/install-all.py --list                         # show the repos that would be used
   python scripts/install-all.py --repos dev,pr                 # only these repos: dev, pr, qa, docs, suite
@@ -74,8 +75,14 @@ def main() -> int:
     if not repos:
         print(f"error: no skill repos found under {args.repos_dir}", file=sys.stderr)
         return 1
-    if args.profile and PROFILES[args.profile] is not None:
-        forward += ["--only", ",".join(PROFILES[args.profile])]
+    has_selection = "--only" in forward or any(a.startswith("--only=") for a in forward)
+    profile = args.profile
+    if not profile and not has_selection and not args.list:
+        profile = "minimal"
+        print("No --profile or --only given: installing the `minimal` profile. "
+              "Every installed skill adds its description to each conversation; use --profile dev|qa|full for more.")
+    if profile and PROFILES[profile] is not None and not has_selection:
+        forward += ["--only", ",".join(PROFILES[profile])]
     if args.list:
         for r in repos:
             print(r)
