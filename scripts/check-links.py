@@ -6,6 +6,8 @@ Usage:
   python scripts/check-links.py --dirs a b c          # explicit repo folders (CI checks them out side by side)
 
 Checks (code fences and evals/ folders are ignored):
+  0. No trigger phrase (a quoted phrase before "Do NOT use" in a description) is claimed by two different
+     skills, in any repo, so the agent never has to guess between them.
   1. "use <skill>" references in skill descriptions and "(use a or b)" lists name a skill that exists
      in at least one of the repos.
   2. Relative Markdown links [text](path) point to a file or folder that exists.
@@ -26,6 +28,7 @@ SKILL_REF = re.compile(r"\buse ([a-z][a-z0-9]*(?:-[a-z0-9]+)+)")
 LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)\s]+)\)")
 GH = re.compile(r"github\.com/Lolisuki18/([A-Za-z0-9_.-]+)")
 FENCE = re.compile(r"```.*?```", re.S)
+TRIGGER = re.compile(r"""['"]([^'"]{6,70})['"]""")
 
 
 def discover(root: Path):
@@ -55,6 +58,21 @@ def main() -> int:
         return 1
     skills = {d.name for r in repos for d in r.iterdir() if d.is_dir() and (d / "SKILL.md").exists()}
     errors = []
+    triggers = {}
+    for repo in repos:
+        for d in sorted(p for p in repo.iterdir() if p.is_dir() and (p / "SKILL.md").exists()):
+            text = (d / "SKILL.md").read_text(encoding="utf-8", errors="ignore")
+            m = re.search(r"^description:\s*(.+)$", text, re.M)
+            if not m:
+                continue
+            desc = m.group(1).strip()
+            if len(desc) > 1 and desc[0] == desc[-1] and desc[0] in "\"'":
+                desc = desc[1:-1]
+            for phrase in set(TRIGGER.findall(desc.split("Do NOT use")[0])):
+                triggers.setdefault(phrase.lower().strip(), set()).add(d.name)
+    for phrase, owners in sorted(triggers.items()):
+        if len(owners) > 1:
+            errors.append(f"trigger phrase {phrase!r} is claimed by {sorted(owners)}")
     for repo in repos:
         for f in md_files(repo):
             rel = f.relative_to(repo).as_posix()
