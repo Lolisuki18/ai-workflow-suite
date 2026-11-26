@@ -33,9 +33,9 @@ Details of what each hand-off must contain are in `references/handoff-map.md`.
 ## Kickoff (Stage 0)
 
 1. Identify the goal and the starting point: a new idea, an existing repo with a feature request, or a finished change that only needs QA and docs. Start at the right stage; earlier stages are marked "not needed" with a reason.
-2. Check what already exists: `plan/`, `qa-artifacts/`, `docs/`, open branches, tags. Never overwrite; ask whether to continue or start over.
-3. Ask once which of the four skill sets are installed. For a missing set, tell the user which stage degrades (for example without the QA set, Stage 3 is limited to `test-case-writer` from the dev set), and continue only if they agree.
-4. Confirm scope in 3-5 lines.
+2. Check what already exists: `plan/`, `qa-artifacts/`, `docs/`, `delivery-notes.md`, `.gitignore`, open branches, tags. Never overwrite; if artifacts belong to an earlier unrelated feature, ask whether to archive/namespace or start over.
+3. Ask once which of the four skill sets are installed (`dev-workflow-skills`, `pull-request-skills`, `qa-workflow-skills`, `docs-workflow-skills`). For a missing set, tell the user which stage degrades (for example without the QA set, Stage 3 is limited to `test-case-writer` from the dev set), and continue only if they agree.
+4. Confirm scope in 3-5 lines (and `.gitignore` choice if `plan/` or `qa-artifacts/` are untracked).
 5. The kickoff answers (continue or start over, installed skill sets, gitignore choices) are passed to the sub-skills and not asked again by them.
 
 ## Running a stage
