@@ -36,10 +36,11 @@ Details of what each hand-off must contain are in `references/handoff-map.md`.
 2. Check what already exists: `plan/`, `qa-artifacts/`, `docs/`, open branches, tags. Never overwrite; ask whether to continue or start over.
 3. Ask once which of the four skill sets are installed. For a missing set, tell the user which stage degrades (for example without the QA set, Stage 3 is limited to `test-case-writer` from the dev set), and continue only if they agree.
 4. Confirm scope in 3-5 lines.
+5. The kickoff answers (continue or start over, installed skill sets, gitignore choices) are passed to the sub-skills and not asked again by them.
 
 ## Running a stage
 
-- Activate the sub-skill through the agent's own mechanism, or read its `SKILL.md` and `references/` and follow it in this conversation. The sub-skill's own hard stops and rules stay in force on top of this skill's.
+- Activate the sub-skill through the agent's own mechanism, or read its `SKILL.md` and `references/` and follow it in this conversation. The sub-skill's own hard stops and rules stay in force on top of this skill's. A delivery stage-start approval may be merged with the sub-skill's first hard stop when the user's approval word is explicit about both.
 - When a sub-skill finishes, write a **handoff note** (`delivery-notes.md` in the project root or the folder the user chooses): stage, date, artifacts produced (paths), real results, open items, decisions made. Keep it short and factual.
 - Pass the requirement IDs through the stages unchanged: `R1..Rn` from the plan become the requirement column of the QA matrix and the traceability in docs. Never renumber silently.
 
@@ -47,16 +48,19 @@ Details of what each hand-off must contain are in `references/handoff-map.md`.
 
 | Between | Gate: do not move on until |
 |---|---|
-| 1 → 2 | the plan is `Done`; tests and checks the plan requires have real results |
+| 1 → 2 | the plan is `Done`; tests and checks the plan requires have real results. A bug fix instead needs a fix committed with a regression test that failed before |
 | 2 → 3 | `pre-pr-self-review` shows no unresolved "fix before opening" item, or the user accepts the risk in writing |
-| 3 → 4 | QA verdict exists; a No-Go means return to Stage 1 for the defects (`bug-investigator`) and re-test via `qa-regression-planner` |
+| 3 → 4 | QA verdict exists (see "QA rounds and defects"); a No-Go means return to Stage 1 for the defects (`bug-investigator`) and re-test via `qa-regression-planner` |
 | 4 → 5 | docs checked against code by `docs-sync-auditor` or the Phase 4 checklist of `docs-lifecycle` |
 
 ## Handling situations
 
 - **A stage fails its gate:** say which gate, show the evidence, and propose the loop-back (for example No-Go → bug fixes → regression plan → new report). Show the loop in the label: `[Delivery Stage 3/5: QA — round 2]`.
+- **Bug-fix loop in Stage 1:** no new plan. Use `bug-investigator`, map the fix to the existing R-ids and record it in `delivery-notes.md`.
+- **Commit ownership:** the commit is made at the end of Stage 1 (by the dev skills when the user asked to commit, otherwise by the user), before Stage 2 self-review. In Stage 2 `commit-message-writer` proposes the message or split. If the work is not committed, Stage 2 says "uncommitted - ask the user to commit or allow it".
+- **QA rounds and defects:** a re-run (round 2) appends a "Round N" section to `qa-artifacts/03`, `04` and `05` and bumps the artifact version, keeping round-1 results. QA cannot close defects: the Stage 3 stop message asks the user to close verified defects before the verdict is final.
 - **Only part of the flow is needed** (for example "write the docs for what we built"): start at that stage; do not drag the user through earlier ones.
-- **Course projects (SEP490 / SWP490):** Stage 4 uses branches B and D of `docs-lifecycle` (Reports 1-7, Review 2 forms). Other projects use branches A, C and E.
+- **Course projects (SEP490 / SWP490):** Stage 4 uses branches B and D of `docs-lifecycle` (Reports 1-7, Review 2 forms). Other projects use branches A, C and E. Route mapping for Stage 4: the changelog belongs to Stage 5, and a docs update is branch A or C.
 - **Resuming:** read `delivery-notes.md`, `plan/`, `qa-artifacts/` and `docs/`, summarize the state, ask where to continue.
 - **Scope:** this skill does not deploy to real environments. `ci-cd-setup` writes files; running them against real systems is the user's decision.
 
