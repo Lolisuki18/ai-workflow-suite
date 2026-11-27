@@ -1,6 +1,6 @@
 {
   "name": "ai-workflow-suite",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Delivery orchestrator (build, pull request, QA, docs, release) plus shared conventions for the four skill repos.",
   "author": {
     "name": "Lolisuki18",

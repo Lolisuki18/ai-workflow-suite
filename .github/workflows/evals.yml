@@ -1,0 +1,97 @@
+name: evals
+
+# Manual only: a real run calls a model for every turn and every llm assertion (cost, time).
+# Never add push or pull_request triggers here.
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: Repo folder name to evaluate (dev-workflow-skills, pull-request-skills, qa-workflow-skills, docs-workflow-skills, suite)
+        required: true
+        default: suite
+      skill:
+        description: Only this skill (empty = all)
+        required: false
+        default: ''
+      runs:
+        description: Runs per case
+        required: true
+        default: '1'
+      dry_run:
+        description: Validate only, no model calls
+        type: boolean
+        default: true
+      model:
+        description: Agent model (empty = CLI default)
+        required: false
+        default: ''
+      grader_model:
+        description: Grader model (empty = same as agent)
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: suite
+      - uses: actions/checkout@v4
+        if: inputs.repo == 'dev-workflow-skills'
+        with:
+          repository: Lolisuki18/dev-workflow-skills
+          path: target
+      - uses: actions/checkout@v4
+        if: inputs.repo == 'pull-request-skills'
+        with:
+          repository: Lolisuki18/pull-request-skills
+          path: target
+      - uses: actions/checkout@v4
+        if: inputs.repo == 'qa-workflow-skills'
+        with:
+          repository: Lolisuki18/qa-workflow-skills
+          path: target
+      - uses: actions/checkout@v4
+        if: inputs.repo == 'docs-workflow-skills'
+        with:
+          repository: Lolisuki18/docs-workflow-skills
+          path: target
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install the Claude Code CLI
+        if: ${{ !inputs.dry_run }}
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Run evals
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REPO_DIR: ${{ inputs.repo == 'suite' && 'suite' || 'target' }}
+          SKILL: ${{ inputs.skill }}
+          RUNS: ${{ inputs.runs }}
+          DRY: ${{ inputs.dry_run }}
+          MODEL: ${{ inputs.model }}
+          GRADER_MODEL: ${{ inputs.grader_model }}
+        run: |
+          args=(--repo "$REPO_DIR" --report out.json --report out.md)
+          [ -n "$SKILL" ] && args+=(--skill "$SKILL")
+          [ -n "$MODEL" ] && args+=(--model "$MODEL")
+          [ -n "$GRADER_MODEL" ] && args+=(--grader-model "$GRADER_MODEL")
+          if [ "$DRY" = "true" ]; then
+            python suite/scripts/run-evals.py "${args[@]}" --dry-run
+          else
+            python suite/scripts/run-evals.py "${args[@]}" --runs "$RUNS"
+          fi
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: |
+            out.json
+            out.md
+          if-no-files-found: ignore
