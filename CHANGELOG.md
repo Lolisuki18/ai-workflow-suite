@@ -2,9 +2,14 @@
 
 Format: newest first. Skills are prompts, so "breaking" means a change in behavior an agent will notice (labels, hard stops, script flags).
 
-## Unreleased (0.2.0)
+## [Unreleased]
+
+## [1.0.0] - 2026-11-27
 
 ### Added
+- Shared automated eval runner `scripts/run-evals.py` (multi-turn cases through the `turns:` convention, `--dry-run`, `--runs`, `--report`), documented in `EVALS.md`.
+- Manual `evals.yml` GitHub Actions workflow (`workflow_dispatch` only, never on push) and unit tests in `tests/test_run_evals.py`.
+- `RELEASING.md`: owner checklist for tagging and releasing the five repos.
 - `delivery-lifecycle/evals/trigger-prompts.md` with positive and negative trigger prompts, including the full idea-to-ship request.
 - `delivery-lifecycle` orchestrator (build, pull request, QA, docs, release) with a hand-off map and one eval case.
 - `CONVENTIONS.md` shared by the four skill repos.
@@ -16,6 +21,8 @@ Format: newest first. Skills are prompts, so "breaking" means a change in behavi
 - Shared `readme-index.py` generates the skill index in every README.
 
 ### Changed
+- `scripts/sync-tools.py` also copies `run-evals.py` into the dev, pull-request and docs repos (`qa-workflow-skills` keeps its own trigger runner).
+- `delivery-lifecycle` reads sub-skill references at the step that names them and `handoff-map.md` once at the first hand-off. Measured (tokens = bytes / 3.8): single-thread worst case for all 5 stages (23 skills) 86,351 -> 62,114 (-28%); eager path 63,880 -> 62,114 (-2.8%).
 - `delivery-lifecycle` description covers idea-to-shipped requests (build, tests, docs, release) and excludes single phases; gate 3 → 4 refers to the small-N rule of `qa-summary-reporter`.
 - `CONVENTIONS.md` section 4: re-run before claiming, record baseline failures, keep line endings.
 - `delivery-lifecycle`: module-form artifact paths, `02b`/`03c` in QA round list, stage-end merged approvals, two meanings of "provisional", fix rounds sized by diff, commit and browser-regression-test ownership; `CONVENTIONS.md` section 10 fix-round sizing.

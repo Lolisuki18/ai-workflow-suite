@@ -31,6 +31,26 @@ Stage 5 Release      changelog-release-notes-writer, runbook-writer, ci-cd-setup
 
 `delivery-lifecycle` labels each reply `[Delivery Stage X/5: ...]`, stops for approval between stages and passes requirement IDs (`R1..Rn`) and real results forward in a `delivery-notes.md`. It does not repeat the work of the sub-skills; it only sequences them. Start at any stage when the earlier ones are not needed. What each stage hands to the next is in [`delivery-lifecycle/references/handoff-map.md`](delivery-lifecycle/references/handoff-map.md).
 
+## What a run looks like
+
+These excerpts come from a test run on a sample app (`Test-skill`, a small habit tracker plus two other toy modules), not from a production project. Excerpt of `delivery-notes-habitly.md`, written by `delivery-lifecycle` while it carried a bug-fix round from build to release prep on the sample habit tracker (first lines and the Stage 1 header):
+
+Source: `Test-skill/delivery-notes-habitly.md`, quoted verbatim.
+
+````markdown
+# Delivery notes - habitly: fix of DEF-001..DEF-004 to release
+
+Build under test (commit): 1a50381 (QA round 2 commit 3b16ca0 on top; docs/release commit after it)
+Base branch: [Needs input: PR base branch; `main` and `origin/main` exist, `feat/habitly` is unmerged]
+Version/tag: none (habitly/package.json:3 declares 1.0.0)
+
+## Stage 1 - Build (bug-fix loop) - 2026-11-27 - status: Done
+Artifacts: habitly/src/storage.js (`getStore`), habitly/src/ui/app.js (`store`, `clearInvalid`, `markInvalid`), habitly/styles.css (`--control-line`, `--done-fg`, `[aria-invalid]`), habitly/tests/contrast.test.js (new), habitly/tests/persistence.test.js (+2 tests). Commit 1a50381 (user asked to commit at the root-cause stop).
+Real results:
+- Reproduced before the fix (Playwright 1.65.1 / Chromium, probe script + TC-STO-006): DEF-001 `PAGEERROR denied`, 0 rows, status "denied"; DEF-003 input/cell border 1.58 light, 1.61 dark; DEF-002 check mark 2.22 dark; DEF-004 `aria-invalid` null, `aria-describedby` null, focus on `habit-submit`.
+- Regression tests failed before the fix: `node --test` -> `tests 24, pass 18, fail 6` (persistence.test.js could not load: `getStore` missing; 5 contrast tests failed). After: `tests 33, pass 33, fail 0` (baseline was 26).
+````
+
 ## Install as Claude Code plugins
 
 Each repo has a `.claude-plugin/plugin.json` and this repo has a `.claude-plugin/marketplace.json` listing all five. After the repos are pushed:
@@ -70,11 +90,16 @@ See [`CONVENTIONS.md`](CONVENTIONS.md): progress labels, hard stops, gap placeho
 
 | Script | What it does |
 |---|---|
-| `scripts/sync-tools.py` | Checks (or with `--apply` fixes) that `install.py`, `readme-index.py` and `validate.py` in every repo equal the canonical copies here. Each repo's CI also diffs them against this repo on GitHub. |
+| `scripts/sync-tools.py` | Checks (or with `--apply` fixes) that `install.py`, `readme-index.py`, `validate.py` and `run-evals.py` in every repo equal the canonical copies here. Each repo's CI also diffs them against this repo on GitHub. |
+| `scripts/run-evals.py` | Runs the eval cases of any of the repos against an agent (multi-turn, graded, `--dry-run` without a model); see [`EVALS.md`](EVALS.md). Copied into every repo except `qa-workflow-skills`, which keeps its own trigger runner. |
 | `scripts/readme-index.py` | Regenerates the skill index of a repo's README from the `SKILL.md` frontmatter; `--check` fails when it is out of date. |
 | `scripts/check-links.py` | Finds `use <skill>` references to skills that do not exist, broken relative links and wrong repository URLs across the five repos (runs in this repo's CI by checking all five out). |
 
 Edit the shared scripts here only, then run `python scripts/sync-tools.py --apply`.
+
+## Releasing
+
+The owner checklist for tagging and publishing is in [`RELEASING.md`](RELEASING.md).
 
 ## Validate
 
