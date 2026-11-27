@@ -64,7 +64,7 @@ Links (junctions on Windows, symlinks elsewhere); existing skills are never over
 
 ## Rules shared by all repos
 
-See [`CONVENTIONS.md`](CONVENTIONS.md): progress labels, hard stops, gap placeholders (`[Needs input]` / `[Cần bổ sung]`), evidence format, artifact folders, requirement IDs, language, skill file rules, safety defaults and small-scope rules.
+See [`CONVENTIONS.md`](CONVENTIONS.md): progress labels, hard stops, gap placeholders (`[Needs input]` / `[Cần bổ sung]`), evidence format, artifact folders (with module namespacing), requirement IDs, language, skill file rules, safety defaults, small-scope rules and sub-skills inside a lifecycle.
 
 ## Keeping the repos in step
 

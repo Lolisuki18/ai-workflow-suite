@@ -30,7 +30,7 @@ Never fill missing facts. Use one placeholder per language of the reply:
 | Vietnamese | `[Cần bổ sung: <what is missing and where to find it>]` |
 | Inferred from code | `[Inferred from code — needs confirmation]` |
 
-The docs set historically uses the Vietnamese form in its templates; both forms mean the same thing and a skill may write either according to the reply language.
+In an English reply write `[Needs input: ...]`. Templates may hold the fixed Vietnamese placeholder `[Cần bổ sung: ...]`; when filling a template, translate it to the reply language. Both forms mean the same thing.
 
 ## 4. Evidence
 
@@ -46,16 +46,18 @@ The docs set historically uses the Vietnamese form in its templates; both forms 
 | Folder | Owner | Content |
 |---|---|---|
 | `plan/` | `feature-plan-writer` | numbered plans, git-ignored by default |
-| `qa-artifacts/` | `qa-lifecycle` and QA skills | `01`-`05` numbered files, plus `02b`, `04b` |
-| `docs/` | `docs-lifecycle` and docs skills | `docs/adr/`, `docs/api/`, `docs/diagrams/`, `docs/runbook.md` |
+| `qa-artifacts/` (module: `qa-artifacts/<module>/`) | `qa-lifecycle` and QA skills | `01`-`05` numbered files, plus `02b`, `03c`, `04b`; tools in `tools/` |
+| `docs/` (module: `docs/<module>/`) | `docs-lifecycle` and docs skills | `adr/`, `api/`, `diagrams/`, `runbook.md`, `_evidence.md`, `README.md` |
 | repo root | `readme-writer`, `changelog-release-notes-writer` | `README.md`, `CHANGELOG.md` |
-| project root | `delivery-lifecycle` | `delivery-notes.md` |
+| project root | `delivery-lifecycle` | `delivery-notes.md` (module: `delivery-notes-<module>.md`) |
 
 A skill never overwrites an existing artifact silently; it asks to continue or start over.
 
+**Modules.** When several independent modules share one repo, namespace one level deep and only there: `plan/` keeps its numbered plans (R-ids are then written `<plan number>:Rn`, for example `003:R2`); `qa-artifacts/<module>/` holds the same file names (`01`..`05`, `02b`, `03c`, `tools/` under `qa-artifacts/<module>/tools/`) and the hook gates each module folder separately; `docs/<module>/` holds `_evidence.md` and `README.md` of that module; the notes file is `delivery-notes-<module>.md`. A single-module repo omits `<module>/`. The caller passes the chosen folder to every sub-skill.
+
 ## 6. Requirement IDs
 
-Plan requirements `R1..Rn` are the single source. QA matrices refer to them, docs refer to them. IDs of other families (`UC01`, `FR-01`, `TC-...`) are documented in their own skills. Retired IDs are never reused.
+Plan requirements `R1..Rn` are the single source (with several plans: `<plan number>:Rn`, see section 5). QA matrices refer to them, docs refer to them. IDs of other families (`UC01`, `FR-01`, `TC-...`) are documented in their own skills. Retired IDs are never reused.
 
 ## 7. Language
 
@@ -68,6 +70,7 @@ Reply in the user's language (English or Vietnamese). Keep identifiers, commands
 - `SKILL.md` under 250 lines; long material in `references/`, one level deep.
 - Code fences balanced; every mentioned `references/` or `scripts/` file exists.
 - A skill reaches a sibling skill only as `../<skill-name>/` and must still work, with reduced scope, when the sibling is missing.
+- `CONVENTIONS.md` lives only in this suite repo and does not ship with a skill. A skill must not cite it as if present; it states the rule it needs inline.
 
 ## 9. Safety defaults
 
@@ -78,6 +81,13 @@ Reply in the user's language (English or Vietnamese). Keep identifiers, commands
 
 ## 10. Small scope
 
-- Size is decided by counting files and requirements, not by the user's adjective ("small", "tiny").
-- For small projects keep the same gates but compact the output; skip N/A blocks with one line.
+- Small = about 5 or fewer source files, or about 500 lines of source or fewer, with one actor. Count files and lines, not the user's adjective ("small", "tiny"); a fix round is sized by its diff (files and lines changed) plus the modules it touches, not the whole project.
+- Small scope may skip the scope-selection approval of READ-ONLY skills (audit, security, explain). Hard stops that approve writes stay.
+- Keep the same gates but compact the output; skip N/A blocks with one line.
 - List the skills considered and skipped, with the reason, in the handover.
+
+## 11. Sub-skills inside a lifecycle
+
+- A sub-skill hard stop that only confirms target path, overwrite or numbering is satisfied by the lifecycle's earlier approval of the exact file list. Hard stops that approve content (draft approval, status) still apply.
+- Inside a lifecycle keep the lifecycle's progress label; the sub-skill's own step label is used only when it runs standalone.
+- In a re-test round, existing artifacts get an appended `Round N` section instead of a question.

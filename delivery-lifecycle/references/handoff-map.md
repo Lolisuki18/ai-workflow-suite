@@ -25,11 +25,13 @@ What each stage must give the next one. If an item is missing, mark it `[Needs i
 
 ## Stage 3 → 4 (QA → Docs)
 
+Paths are relative to the chosen module folder; single-module repos omit `<module>/`.
+
 | Item | Where it comes from |
 |---|---|
-| Verdict (Go / Conditional Go / No-Go) and residual risks | `qa-artifacts/05-summary-report.md` |
-| Real execution numbers (for Report 5 style packaging) | `qa-artifacts/03-execution-notes.md` |
-| Open defects and known limitations (QA cannot close defects; the user closes verified ones) | `qa-artifacts/04-defects.md` |
+| Verdict (Go / Conditional Go / No-Go) and residual risks | `qa-artifacts/[<module>/]05-summary-report.md` |
+| Real execution numbers (for Report 5 style packaging) | `qa-artifacts/[<module>/]03-execution-notes.md` |
+| Open defects and known limitations (QA cannot close defects; the user closes verified ones) | `qa-artifacts/[<module>/]04-defects.md` |
 | Behaviors confirmed by tests (for user guide and API docs) | test matrix, API track notes |
 
 ## Stage 4 → 5 (Docs → Release)
@@ -69,6 +71,7 @@ Accepted risks: <risk> - <who> - <date>
 ## Stage 3 - QA - ... (QA round: N)
 Verdict + gate source: <Go / Conditional Go / No-Go> - <file that decides it>
 Not run / failing items: <own list>
+("Provisional" has two meanings. (a) `Conditional Go (provisional)`: the only open items are Not Run cases that need a person or device; list each with who/what is needed, and re-issue the verdict after they run. (b) Defects in `Re-test` status are listed as "awaiting user close"; once the re-test passed they do not count as open Blocker/Critical in the gate, but the verdict says "pending user close" until the user closes them.)
 
 ## Stage 4 - Docs - ...
 ## Stage 5 - Release - ...
