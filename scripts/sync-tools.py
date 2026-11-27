@@ -13,6 +13,9 @@ Shared files:
   install.py     every repo
   readme-index.py every repo
   validate.py    every repo that has its own copy (the dev repo uses its own validate-skills.py)
+  run-evals.py   every repo except those in KEEP_LOCAL (qa-workflow-skills keeps its own trigger-prompt runner,
+                 whose flags --cmd/--detect-regex/--only/--out are documented in that repo; run the shared tool
+                 on it with `python scripts/run-evals.py --repo ../qa-workflow-skills`)
 
 Repos are the folders under --repos-dir (default: the parent of this repo), up to two levels deep,
 that contain scripts/install.py. Stdlib only.
@@ -23,8 +26,9 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SHARED = ["install.py", "readme-index.py", "validate.py"]
+SHARED = ["install.py", "readme-index.py", "validate.py", "run-evals.py"]
 OPTIONAL = {"validate.py"}  # copied only where the repo already has one
+KEEP_LOCAL = {"run-evals.py": {"qa-workflow-skills"}}  # repos that keep their own, different file
 
 
 def find_repos(root: Path):
@@ -50,6 +54,8 @@ def main() -> int:
     differ = 0
     for repo in repos:
         for name in SHARED:
+            if repo.name in KEEP_LOCAL.get(name, ()):
+                continue
             canon = HERE / name
             copy = repo / "scripts" / name
             if not canon.exists():

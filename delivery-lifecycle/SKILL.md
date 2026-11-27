@@ -28,7 +28,7 @@ Sequences work that other skills already do. This skill never re-implements a st
 | 4. Docs | `docs-lifecycle` (+ `readme-writer`, `diagram-writer`, `api-doc-writer`, `adr-writer`) | code, plan, QA results | updated README, diagrams, API docs, ADRs |
 | 5. Release | `changelog-release-notes-writer`, `runbook-writer`, `ci-cd-setup` | merged work, tags | `CHANGELOG.md`, release notes, `docs/runbook.md`, pipeline |
 
-Details of what each hand-off must contain are in `references/handoff-map.md`.
+Details of what each hand-off must contain are in `references/handoff-map.md`: read it once, when you write the first hand-off note or first evaluate a gate (not at kickoff), and do not re-read it later in the same conversation.
 
 ## Kickoff (Stage 0)
 
@@ -40,7 +40,7 @@ Details of what each hand-off must contain are in `references/handoff-map.md`.
 
 ## Running a stage
 
-- Activate the sub-skill through the agent's own mechanism, or read its `SKILL.md` and `references/` and follow it in this conversation. The sub-skill's own hard stops and rules stay in force on top of this skill's. Hard stops that only confirm paths, overwrite or numbering are covered by the approved file list; the lifecycle label stays on the first line. A delivery stage-start approval may be merged with the sub-skill's first hard stop, and a stage-END stop may be merged with a sub-skill content approval (`readme-writer`, `changelog-release-notes-writer` draft), when the user's approval word is explicit about both and both messages were shown; each underlying approval is still written down in the Decisions block.
+- Activate the sub-skill through the agent's own mechanism, or read its `SKILL.md` and follow it in this conversation, reading a file from its `references/` only when its process reaches the step that names it and skipping any file already read in this conversation. The sub-skill's own hard stops and rules stay in force on top of this skill's. Hard stops that only confirm paths, overwrite or numbering are covered by the approved file list; the lifecycle label stays on the first line. A delivery stage-start approval may be merged with the sub-skill's first hard stop, and a stage-END stop may be merged with a sub-skill content approval (`readme-writer`, `changelog-release-notes-writer` draft), when the user's approval word is explicit about both and both messages were shown; each underlying approval is still written down in the Decisions block.
 - When a sub-skill finishes, write a **handoff note** (`delivery-notes.md` in the project root or the folder the user chooses): stage, date, artifacts produced (paths), real results, skipped skills with reasons (for small scope), open items, decisions made. Keep it short and factual.
 - Pass the requirement IDs through the stages unchanged: `R1..Rn` from the plan become the requirement column of the QA matrix and the traceability in docs. Never renumber silently.
 
