@@ -40,6 +40,9 @@ In an English reply write `[Needs input: ...]`. Templates may hold the fixed Vie
 - Take `file:line` from tool output in the same turn; re-check after edits; do not hard-code numbers that rot.
 - Placeholders are for facts not seen; results seen in this session are written as real results with the command.
 - Never put secrets in files or replies: name them and where they live.
+- After the last change, re-run the probe or test before claiming a behavior; if not re-run, say so.
+- Record baseline failures before changing code; only new failures block; list baseline failures in the report.
+- Keep each file's existing line endings; do not rewrite whole files.
 
 ## 5. Artifact folders
 

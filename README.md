@@ -16,7 +16,7 @@ The glue for four Agent Skills repos: one orchestrator (`delivery-lifecycle`) th
 
 | Skill | What it does |
 |---|---|
-| [`delivery-lifecycle`](delivery-lifecycle/SKILL.md) | Orchestrates a whole delivery across the four skill sets in 5 stages - Build, Pull Request, QA, Docs and Release |
+| [`delivery-lifecycle`](delivery-lifecycle/SKILL.md) | Orchestrates a whole delivery from idea to shipped across the four skill sets in 5 stages - Build, Pull Request, QA, Docs and Release |
 <!-- skills:end -->
 
 ## The flow

@@ -1,6 +1,6 @@
 ---
 name: delivery-lifecycle
-description: Orchestrates a whole delivery across the four skill sets in 5 stages - Build, Pull Request, QA, Docs and Release - handing artifacts from one stage to the next with a hard stop between stages. Use when the user says 'take this from idea to release', 'full delivery workflow', 'build, test, document and ship this feature', 'what is the whole process'. Do NOT use for a single stage on its own (use dev-lifecycle, qa-lifecycle or docs-lifecycle directly), a quick code edit, one bug (use bug-investigator), or one document.
+description: Orchestrates a whole delivery from idea to shipped across the four skill sets in 5 stages - Build, Pull Request, QA, Docs and Release - with a hard stop between stages. Use when the user wants build + tests + docs + release in one go: 'take it all the way from idea to release', 'build it, test it, write the docs and get it ready to ship', 'full delivery workflow'. Do NOT use for a single phase on its own (use dev-lifecycle, qa-lifecycle or docs-lifecycle), a quick code edit, one bug (use bug-investigator), or one document.
 ---
 
 # Delivery Lifecycle — Conductor of the 5 stages
@@ -52,6 +52,8 @@ Details of what each hand-off must contain are in `references/handoff-map.md`.
 | 2 → 3 | `pre-pr-self-review` shows no unresolved "fix before opening" item, or the user accepts the risk in writing |
 | 3 → 4 | QA verdict exists (see "QA rounds and defects"); `Conditional Go (provisional)` is acceptable when the only open items are Not Run cases that need a person or device (list them in the notes' Not run list; details in `references/handoff-map.md`); a No-Go means return to Stage 1 for the defects (`bug-investigator`) and re-test via `qa-regression-planner` |
 | 4 → 5 | docs checked against code by `docs-sync-auditor` or the Phase 4 checklist of `docs-lifecycle` |
+
+Gate 3 → 4 reads the verdict from `qa-summary-reporter`; with few cases in a priority class its small-N rule (judge by defect severity, not the percentage) applies as written there.
 
 ## Handling situations
 
