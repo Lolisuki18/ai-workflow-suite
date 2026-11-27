@@ -33,15 +33,15 @@ Details of what each hand-off must contain are in `references/handoff-map.md`.
 ## Kickoff (Stage 0)
 
 1. Identify the goal and the starting point: a new idea, an existing repo with a feature request, or a finished change that only needs QA and docs. Start at the right stage; earlier stages are marked "not needed" with a reason.
-2. Check what already exists: `plan/`, `qa-artifacts/`, `docs/`, `delivery-notes.md`, `.gitignore`, open branches, tags. Never overwrite; if artifacts belong to an earlier unrelated feature, ask whether to archive/namespace or start over.
+2. Check what already exists: `plan/`, `qa-artifacts/`, `docs/`, `delivery-notes.md`, `.gitignore`, open branches, tags. Never overwrite; if artifacts belong to an earlier unrelated feature or another independent app in the same repo, ask whether to archive/namespace per module (e.g. `qa-artifacts/<module>/`, `delivery-notes-<module>.md`) or start over.
 3. Ask once which of the four skill sets are installed (`dev-workflow-skills`, `pull-request-skills`, `qa-workflow-skills`, `docs-workflow-skills`). For a missing set, tell the user which stage degrades (for example without the QA set, Stage 3 is limited to `test-case-writer` from the dev set), and continue only if they agree.
-4. Confirm scope in 3-5 lines (and `.gitignore` choice if `plan/` or `qa-artifacts/` are untracked).
+4. Confirm scope in 3-5 lines, report whether `plan/` and `qa-artifacts/` are already gitignored, tracked, or untracked, and ask for a `.gitignore` choice if needed.
 5. The kickoff answers (continue or start over, installed skill sets, gitignore choices) are passed to the sub-skills and not asked again by them.
 
 ## Running a stage
 
 - Activate the sub-skill through the agent's own mechanism, or read its `SKILL.md` and `references/` and follow it in this conversation. The sub-skill's own hard stops and rules stay in force on top of this skill's. A delivery stage-start approval may be merged with the sub-skill's first hard stop when the user's approval word is explicit about both.
-- When a sub-skill finishes, write a **handoff note** (`delivery-notes.md` in the project root or the folder the user chooses): stage, date, artifacts produced (paths), real results, open items, decisions made. Keep it short and factual.
+- When a sub-skill finishes, write a **handoff note** (`delivery-notes.md` in the project root or the folder the user chooses): stage, date, artifacts produced (paths), real results, skipped skills with reasons (for small scope), open items, decisions made. Keep it short and factual.
 - Pass the requirement IDs through the stages unchanged: `R1..Rn` from the plan become the requirement column of the QA matrix and the traceability in docs. Never renumber silently.
 
 ## Gates
@@ -58,7 +58,7 @@ Details of what each hand-off must contain are in `references/handoff-map.md`.
 - **A stage fails its gate:** say which gate, show the evidence, and propose the loop-back (for example No-Go → bug fixes → regression plan → new report). Show the loop in the label: `[Delivery Stage 3/5: QA — round 2]`.
 - **Bug-fix loop in Stage 1:** no new plan. Use `bug-investigator`, map the fix to the existing R-ids and record it in `delivery-notes.md`.
 - **Commit ownership:** the commit is made at the end of Stage 1 (by the dev skills when the user asked to commit, otherwise by the user), before Stage 2 self-review. In Stage 2 `commit-message-writer` proposes the message or split. If the work is not committed, Stage 2 says "uncommitted - ask the user to commit or allow it".
-- **QA rounds and defects:** a re-run (round 2) appends a "Round N" section to `qa-artifacts/03`, `04` and `05` and bumps the artifact version, keeping round-1 results. QA cannot close defects: the Stage 3 stop message asks the user to close verified defects before the verdict is final.
+- **QA rounds and defects:** a re-run (round 2) appends a "Round N" section to `qa-artifacts/03`, `04`, `04b` (when a regression plan exists) and `05` and bumps the artifact version, keeping round-1 results. QA cannot close defects: the Stage 3 stop message asks the user to close verified defects before the verdict is final.
 - **Only part of the flow is needed** (for example "write the docs for what we built"): start at that stage; do not drag the user through earlier ones.
 - **Course projects (SEP490 / SWP490):** Stage 4 uses branches B and D of `docs-lifecycle` (Reports 1-7, Review 2 forms). Other projects use branches A, C and E. Route mapping for Stage 4: the changelog belongs to Stage 5, and a docs update is branch A or C.
 - **Resuming:** read `delivery-notes.md`, `plan/`, `qa-artifacts/` and `docs/`, summarize the state, ask where to continue.

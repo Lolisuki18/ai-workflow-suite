@@ -52,9 +52,14 @@ Build under test (commit): <hash or [Needs input]>
 Base branch: <name or [Needs input]>
 Version/tag: <value or none>
 
+## Stage 0 - Kickoff - <date> (optional)
+Existing artifacts / `.gitignore`: <summary>
+Installed skill sets: <list>
+
 ## Stage 1 - Build - <date> - status: Done | Done with conditions | In progress | Skipped (reason)
 Artifacts: plan/001-...md, <PR branch>
 Real results: <commands and outcomes>
+Skipped skills (reason): <none or list>
 Open items: ...
 
 ## Stage 2 - Pull Request - ...
